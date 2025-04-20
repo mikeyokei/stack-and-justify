@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="css/reset.css">
 	<link rel="stylesheet" href="css/main.css">
 	<link rel="stylesheet" href="css/simple-mobile.css">
+	<link rel="stylesheet" href="css/mobile.css"> <!-- Add the new mobile CSS -->
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗜️</text></svg>">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta name="description" content="Stack & Justify is a tool to help create type specimens by finding words or phrases of the same width. It is free to use and distributed under GPLv3 license.">
@@ -33,49 +34,11 @@
 <body>
 	<div id="app"></div>
 	<script src="js/vendor/mithril.min.js"></script>
-	<!-- Simple Mobile Helper Script -->
-	<script>
-		// Simple mobile helper
-		document.addEventListener('DOMContentLoaded', function() {
-			// Add mobile class to body if on mobile device
-			if (window.innerWidth <= 768) {
-				document.body.classList.add('mobile-device');
-				
-				// Fix language menu accessibility on mobile
-				setTimeout(function() {
-					// Make language options always visible on mobile
-					const languagesContainer = document.querySelector('.languages-container');
-					if (languagesContainer) {
-						languagesContainer.style.display = 'block';
-						languagesContainer.style.position = 'relative';
-						languagesContainer.style.maxHeight = 'none';
-						languagesContainer.style.overflow = 'visible';
-					}
-					
-					// Make language checkboxes easier to tap
-					const languageCheckboxes = document.querySelectorAll('.language-checkbox');
-					languageCheckboxes.forEach(checkbox => {
-						checkbox.style.padding = '10px';
-						checkbox.style.display = 'block';
-						const input = checkbox.querySelector('input');
-						if (input) {
-							input.style.width = '24px';
-							input.style.height = '24px';
-						}
-					});
-				}, 1000); // Give the app time to render
-				
-				// Handle orientation changes
-				window.addEventListener('orientationchange', function() {
-					// Refresh the page on orientation change for better layout
-					window.location.reload();
-				});
-			}
-		});
-	</script>
 	<script src="js/app.js" type="module"></script>
+	<!-- Add the mobileFix.js script after the application loads -->
+	<script src="js/mobileFix.js"></script>
 	<script>
-		console.log('%c🗜️ Stack & Justify\n%cCreated by Max Esnée\n%cVersion: 1.12\n%cSource code available at:\n%chttps://github.com/maxesnee/stack-and-justify', 
+		console.log('%c🗜️ Stack & Justify\n%cCreated by Max Esnée\n%cVersion: 1.13\n%cSource code available at:\n%chttps://github.com/maxesnee/stack-and-justify', 
 			'font-weight: bold; font-size: 24px; font-family: system-ui; line-height: 1.5; border-bottom: 1px solid; display:block;margin-bottom: 8px', 
 			'font-family: system-ui',
 			'font-family: system-ui',
