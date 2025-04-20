@@ -1,178 +1,70 @@
-/* Enhanced mobile styles for Stack & Justify */
+/* Mobile menu fix for Stack & Justify */
 
 @media screen and (max-width: 768px) {
-  /* Fix the header structure on mobile */
-  .header {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 1rem;
+  /* Fix the oversized language menu */
+  .menu-container .menu {
+    position: relative !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+    border: 1px solid var(--fg-color) !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+    margin: 10px 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
   }
 
-  /* Make the logo stay visible */
-  .logo {
-    margin-bottom: 1rem;
+  /* Make the submenu content scrollable */
+  .submenu-content {
+    max-height: 200px !important;
+    overflow-y: auto !important;
   }
 
-  /* Fix the drop message */
-  .drop-message {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    order: 2; /* Ensure the drop message appears in a consistent place */
-  }
-
-  /* Replace multiple Select Font Files buttons with single styled button */
-  .drop-message button.drop-btn {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 12px;
-    text-align: center;
-    background-color: var(--green);
-    color: white;
-    border: none;
-    border-radius: 4px;
-  }
-
-  /* Fix the specimen layout */
-  .specimen {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .specimen-header {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-  }
-
-  .specimen-line {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 0;
-    margin-bottom: 1rem;
-    border-bottom: 1px dotted var(--fg-color);
-  }
-
-  .line-left-col, 
-  .line-middle-col, 
-  .line-right-col {
-    width: 100%;
-    padding: 0.5rem 0;
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .line-middle-col {
-    order: -1; /* Put text at the top */
-  }
-
-  /* Make controls more accessible */
-  .size-input, 
-  .font-select, 
-  .case-select {
-    margin-right: 0;
-    margin-bottom: 1rem;
-    width: 100%;
-  }
-
-  /* Fix checkboxes in all menus */
+  /* Make checkboxes visible and properly sized */
   input[type="checkbox"] {
     display: inline-block !important;
     appearance: checkbox !important;
     -webkit-appearance: checkbox !important;
-    opacity: 1 !important;
     width: 20px !important;
     height: 20px !important;
-    position: relative !important;
-    vertical-align: middle !important;
-    margin-right: 8px !important;
-  }
-
-  /* Disable custom checkbox styling */
-  .checkbox label::before {
-    display: none !important;
-  }
-
-  .checkbox {
-    padding: 0.5rem;
-  }
-
-  .checkbox label {
-    display: inline-block;
-    padding-left: 0 !important;
-  }
-
-  /* Fix menu display on mobile */
-  .menu-container .menu {
+    opacity: 1 !important;
     position: static !important;
-    width: 100% !important;
-    max-height: none !important;
-    margin: 10px 0 !important;
-    overflow: visible !important;
-    border: 1px solid var(--fg-color) !important;
-    border-radius: 4px !important;
-    padding: 10px !important;
-    box-sizing: border-box !important;
+    margin-right: 8px !important;
+    vertical-align: middle !important;
   }
 
-  .submenu {
-    margin-bottom: 10px !important;
-  }
-
-  .submenu-content {
-    max-height: none !important;
-    display: block !important;
-    overflow: visible !important;
-  }
-
-  /* Ensure menus are visible */
-  .options, .features {
-    display: block !important;
-    margin-bottom: 15px !important;
-  }
-
-  /* Fix font selection */
-  select {
-    appearance: menulist !important;
-    -webkit-appearance: menulist !important;
-    background-color: transparent !important;
-    border: 1px solid var(--fg-color) !important;
+  /* Better spacing for menu items */
+  .checkbox {
     padding: 8px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Make sure specimen lines display properly */
+  .specimen-line {
+    padding: 10px 0 !important;
+  }
+
+  .line-middle-col .text {
     display: block !important;
-    width: auto !important;
+    width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  /* Fix the width input on mobile */
+  .width-input {
+    width: 100% !important;
     max-width: 100% !important;
   }
-
-  /* Fix the new line button */
-  .new-line {
-    padding: 15px 0;
-  }
-
-  .new-line-button {
-    display: block;
-    width: 100%;
-    padding: 15px;
-    text-align: center;
-    background-color: var(--grey-light);
-    border: 1px solid var(--fg-color);
-    border-radius: 4px;
-  }
-
-  /* Hide tooltips on mobile */
-  .tooltip {
-    display: none !important;
-  }
-
-  /* Add swipe hints */
-  .specimen-line::after {
-    content: "Swipe left to delete • Swipe right to copy";
-    display: block;
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--grey);
-    padding: 5px 0;
-    margin-top: 5px;
-    width: 100%;
+  
+  /* Make the update and options buttons more visible */
+  .menu-update button {
+    display: block !important;
+    width: 100% !important;
+    padding: 10px !important;
+    margin-top: 10px !important;
+    background-color: var(--green) !important;
+    color: white !important;
+    border-radius: 4px !important;
   }
 }
