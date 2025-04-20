@@ -13,8 +13,19 @@
     margin-bottom: 1rem;
   }
 
+  /* Make the drop message more visible */
+  .drop-message {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+  }
+
   /* Fix the specimen layout */
   .specimen {
+    grid-template-columns: 1fr;
+  }
+
+  .specimen-header {
     grid-template-columns: 1fr;
   }
 
@@ -29,6 +40,8 @@
   .line-right-col {
     width: 100%;
     padding: 0.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
   }
 
   .line-middle-col {
@@ -62,28 +75,32 @@
 
   /* Make the menu more accessible */
   .menu {
+    position: static;
     left: 0;
     width: 100%;
     max-width: 100%;
-    top: 100%;
     border-radius: 0;
+    visibility: visible !important;
+    display: block !important;
   }
 
   .submenu-content {
     max-height: none !important;
     display: block !important;
+    overflow: visible !important;
   }
 
   /* Improve checkbox visibility */
   input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
     display: inline-block !important;
-    appearance: auto !important;
-    -webkit-appearance: checkbox !important;
+    width: 20px !important;
+    height: 20px !important;
     opacity: 1 !important;
-    position: relative;
-    vertical-align: middle;
+    position: relative !important;
+    vertical-align: middle !important;
+    appearance: checkbox !important;
+    -webkit-appearance: checkbox !important;
+    margin-right: 8px !important;
   }
 
   .checkbox {
@@ -95,13 +112,17 @@
     vertical-align: middle;
   }
 
+  .checkbox label::before {
+    display: none !important;
+  }
+
   /* Add swipe hints */
   .specimen-line {
     position: relative;
   }
 
   .specimen-line::before {
-    content: "Swipe left to delete \u2022 Swipe right to copy";
+    content: "Swipe left to delete • Swipe right to copy";
     font-size: 0.8rem;
     color: var(--grey);
     text-align: center;
@@ -113,55 +134,72 @@
     opacity: 0.7;
   }
 
-  /* Mobile section headers */
-  .mobile-section-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.75rem 0;
-    cursor: pointer;
-  }
-
-  /* Make tooltips work better on touch */
+  /* Fix tooltips on mobile */
   .tooltip {
-    display: none;
+    display: none !important;
   }
 
-  /* Fix visibility of language menu */
-  .language-menu, 
-  .languages-container,
-  .submenu-content {
+  /* Fix width input to be more touch-friendly */
+  .width-input {
+    padding: 10px 0;
+    height: auto;
+  }
+
+  .width-input-handle {
+    padding: 10px;
+    width: 20px !important;
+    height: 30px !important;
+  }
+
+  /* Add a custom mobile font selection button */
+  .mobile-font-selector {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: var(--grey-light);
+    border: 1px solid var(--fg-color);
+    border-radius: 4px;
+  }
+
+  /* Make dropzone visible for mobile */
+  .drop-zone.active {
+    z-index: 1000;
+  }
+  
+  /* Make language menu accessible */
+  .menu-container.options .menu {
+    position: static !important;
     display: block !important;
-    position: relative !important;
-    max-height: none !important;
-    top: auto !important;
-    left: auto !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
     width: 100% !important;
+    max-height: none !important;
     overflow: visible !important;
   }
-
-  /* Fix checkboxes in the language menu */
-  .languages-container input[type="checkbox"],
-  .submenu-content input[type="checkbox"] {
+  
+  /* Fix select styling on mobile */
+  select {
+    width: auto !important;
+    max-width: 100% !important;
+    appearance: menulist !important;
+    -webkit-appearance: menulist !important;
     display: inline-block !important;
-    width: 24px !important;
-    height: 24px !important;
-    margin-right: 8px !important;
-    vertical-align: middle !important;
-    appearance: checkbox !important;
-    -webkit-appearance: checkbox !important;
-    opacity: 1 !important;
+    padding: 5px !important;
+    background-color: transparent !important;
+    border: 1px solid var(--fg-color) !important;
   }
-
-  /* Make language options more tappable */
-  .languages-container label,
-  .submenu-content label {
-    display: block !important;
-    padding: 10px 5px !important;
-    margin: 5px 0 !important;
+  
+  /* Fix new line button */
+  .new-line {
+    padding: 15px 0;
   }
-
-  /* Ensure swipe gestures work properly */
-  .specimen-line {
-    touch-action: pan-y;
+  
+  .new-line-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--fg-color);
+    border-radius: 4px;
   }
 }
