@@ -1,42 +1,108 @@
-/* Fix for mobile issues - Stack & Justify */
+/* ==== MOBILE CSS FIX ==== */
+/* This file contains complete fixes for Stack & Justify on mobile */
+
+/* Basic mobile layout adjustments */
 @media screen and (max-width: 768px) {
-  /* Fix the menu display on mobile */
+  /* Fix the header layout */
+  .header {
+    display: flex !important;
+    flex-direction: column !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .options, .features {
+    display: block !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Make the language chooser menu properly sized */
   .menu-container .menu {
-    position: relative !important;
+    position: absolute !important;
     max-height: 300px !important;
     overflow-y: auto !important;
+    width: 300px !important;
+    z-index: 9999 !important;
+    background-color: var(--bg-color) !important;
     border: 1px solid var(--fg-color) !important;
-    border-radius: 4px !important;
-    margin: 10px 0 !important;
+  }
+
+  /* Fix the specimen display */
+  .specimen {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .specimen-header {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 10px 0 !important;
+  }
+
+  .specimen-body {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .specimen-line {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto auto !important;
+    padding: 10px 0 !important;
+    margin-bottom: 10px !important;
+    border-bottom: 1px dotted var(--fg-color) !important;
+  }
+
+  /* Arrange elements in line */
+  .line-left-col, 
+  .line-middle-col, 
+  .line-right-col {
+    grid-column: 1 !important;
     width: 100% !important;
-    box-sizing: border-box !important;
+    padding: 5px 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
   }
 
-  /* Make the submenu content scrollable */
-  .submenu-content {
-    max-height: 200px !important;
-    overflow-y: auto !important;
+  /* Text area goes first */
+  .specimen-line .line-middle-col {
+    grid-row: 1 !important;
+    order: -1 !important;
   }
 
-  /* Fix text visibility */
+  /* Controls below text */
+  .specimen-line .line-left-col {
+    grid-row: 2 !important;
+  }
+
+  .specimen-line .line-right-col {
+    grid-row: 3 !important;
+  }
+
+  /* CRITICAL FIX: Make sure text is visible */
   .specimen-line .text {
     opacity: 1 !important;
     visibility: visible !important;
     display: block !important;
-    overflow-wrap: break-word !important;
+    min-height: 30px !important;
     width: 100% !important;
-  }
-  
-  .specimen-line .loading {
-    display: none !important;
-  }
-  
-  .line-middle-col {
-    width: 100% !important;
-    overflow: visible !important;
+    word-wrap: break-word !important;
   }
 
-  /* Fix checkboxes */
+  .specimen-line .text.hidden {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+
+  /* Hide loading indicators */
+  .specimen-line .loading.visible {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+
+  /* Improve checkbox display */
   input[type="checkbox"] {
     display: inline-block !important;
     appearance: checkbox !important;
@@ -53,59 +119,22 @@
     display: none !important;
   }
 
-  /* Better spacing for menu items */
-  .checkbox {
+  /* Make control buttons more accessible */
+  button {
+    min-width: 44px !important;
+    min-height: 44px !important;
     padding: 8px !important;
-    margin-bottom: 0 !important;
+    margin: 2px !important;
   }
 
-  /* Fix the header structure */
-  .options, .features {
+  /* Fix mobile font selection button */
+  .drop-btn {
     display: block !important;
-    margin-bottom: 15px !important;
-    order: 2 !important;
-  }
-
-  /* Make the update button more visible */
-  .menu-update button {
-    display: block !important;
-    width: 100% !important;
-    padding: 10px !important;
-    margin-top: 10px !important;
+    margin: 10px 0 !important;
+    padding: 12px !important;
     background-color: var(--green) !important;
     color: white !important;
     border-radius: 4px !important;
-  }
-  
-  /* Fix specimen display */
-  .specimen {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-  
-  .specimen-header {
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 10px 0 !important;
-  }
-  
-  .specimen-line {
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 10px 0 !important;
-    margin-bottom: 10px !important;
-  }
-  
-  .line-left-col, 
-  .line-middle-col, 
-  .line-right-col {
-    width: 100% !important;
-    padding: 5px 0 !important;
-    display: flex !important;
-    flex-wrap: wrap !important;
-  }
-  
-  .line-middle-col {
-    order: -1 !important; /* Move text to the top */
+    text-align: center !important;
   }
 }
