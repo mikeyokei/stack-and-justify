@@ -40,6 +40,8 @@
     fixLanguageMenu();
     makeTouchTargetsLarger();
     addSwipeGestures();
+    fixFontLoading();
+    fixMenuDisplay();
     
     // Fix the duplicate buttons issue by removing any existing buttons first
     fixMobileFileSelection();
@@ -56,10 +58,10 @@
         const menu = menuContainer.querySelector('.menu');
         if (menu) {
           menu.style.visibility = 'visible';
-          menu.style.position = 'static';
+          menu.style.position = 'relative';
           menu.style.margin = '10px 0';
-          menu.style.maxHeight = 'none';
-          menu.style.overflow = 'visible';
+          menu.style.maxHeight = '300px';
+          menu.style.overflow = 'auto';
           
           // Fix checkboxes
           const checkboxes = menu.querySelectorAll('input[type="checkbox"]');
@@ -244,5 +246,73 @@
     if (window.Fonts && typeof window.Fonts.handleFontFiles === 'function') {
       window.handleFontFiles = window.Fonts.handleFontFiles;
     }
+  }
+
+  // Function to fix text visibility issues on mobile
+  function fixTextVisibility() {
+    // Only run on mobile devices
+    if (window.innerWidth > 768) return;
+    
+    // Force text elements to be visible on mobile
+    const textElements = document.querySelectorAll('.specimen-line .text');
+    textElements.forEach(el => {
+      el.classList.remove('hidden');
+      el.classList.add('visible');
+      
+      // Make the text visible even if class change doesn't work
+      el.style.opacity = '1';
+      el.style.visibility = 'visible';
+      el.style.display = 'block';
+    });
+    
+    // Hide loading indicators
+    const loadingElements = document.querySelectorAll('.specimen-line .loading');
+    loadingElements.forEach(el => {
+      el.classList.remove('visible');
+      el.classList.add('hidden');
+      
+      // Force hide loading indicators
+      el.style.opacity = '0';
+      el.style.visibility = 'hidden';
+      el.style.display = 'none';
+    });
+  }
+
+  // Fix font loading issues
+  function fixFontLoading() {
+    // Listen for font loading events
+    window.addEventListener('font-loaded', function(e) {
+      console.log('Font loaded event received, fixing visibility');
+      setTimeout(fixTextVisibility, 300); // Add delay to ensure DOM updates
+    });
+    
+    // Also check periodically for a few seconds after font loading
+    let checkCounter = 0;
+    const checkInterval = setInterval(function() {
+      fixTextVisibility();
+      checkCounter++;
+      if (checkCounter > 10) clearInterval(checkInterval);
+    }, 500);
+  }
+
+  // Fix menu display issues
+  function fixMenuDisplay() {
+    const optionsMenus = document.querySelectorAll('.options, .features');
+    optionsMenus.forEach(menu => {
+      menu.style.display = 'block';
+      const menuBtn = menu.querySelector('.menu-button');
+      if (menuBtn) {
+        menuBtn.addEventListener('click', function() {
+          // Force proper menu size and scrollability
+          const menuContent = menu.querySelector('.menu');
+          if (menuContent) {
+            menuContent.style.visibility = 'visible';
+            menuContent.style.position = 'relative';
+            menuContent.style.maxHeight = '300px';
+            menuContent.style.overflowY = 'auto';
+          }
+        });
+      }
+    });
   }
 })();
