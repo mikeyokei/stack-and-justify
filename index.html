@@ -5,7 +5,6 @@
 	<title>Stack & Justify</title>
 	<link rel="stylesheet" href="css/reset.css">
 	<link rel="stylesheet" href="css/main.css">
-	<!-- Remove the simple-mobile.css which is 404ing -->
 	<link rel="stylesheet" href="css/mobile.css">
 	<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🗜️</text></svg>">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -15,102 +14,111 @@
 	<meta property="og:image" content="https://max-esnee.com/stack-and-justify/images/screenshot.png">
 	<meta property="og:url" content="https://max-esnee.com/stack-and-justify/">
 	<meta property="og:type" content="website">
-	<!-- Immediate fix for mobile issues -->
+	
+	<!-- Critical mobile fixes -->
 	<style>
 	@media screen and (max-width: 768px) {
-		/* Fix the menu display on mobile */
-		.menu-container .menu {
-			position: relative !important;
-			max-height: 300px !important;
-			overflow-y: auto !important;
-			border: 1px solid var(--fg-color) !important;
-			border-radius: 4px !important;
-			margin: 10px 0 !important;
-			width: 100% !important;
-			box-sizing: border-box !important;
+		/* Fix the header layout */
+		.header {
+			display: flex !important;
+			flex-direction: column !important;
+			padding-bottom: 1rem !important;
 		}
 
-		/* Make the submenu content scrollable */
-		.submenu-content {
-			max-height: 200px !important;
-			overflow-y: auto !important;
+		.options, .features {
+			display: block !important;
+			margin-bottom: 10px !important;
 		}
 
-		/* Fix text visibility */
+		/* CRITICAL FIX: Make sure text is visible */
 		.specimen-line .text {
 			opacity: 1 !important;
 			visibility: visible !important;
 			display: block !important;
-			overflow-wrap: break-word !important;
+			min-height: 30px !important;
 			width: 100% !important;
+			word-wrap: break-word !important;
 		}
-		
+
+		.specimen-line .text.hidden {
+			opacity: 1 !important;
+			visibility: visible !important;
+			display: block !important;
+		}
+
+		/* Hide loading indicators */
 		.specimen-line .loading {
 			display: none !important;
-		}
-		
-		.line-middle-col {
-			width: 100% !important;
-			overflow: visible !important;
+			opacity: 0 !important;
+			visibility: hidden !important;
 		}
 
-		/* Fix checkboxes */
-		input[type="checkbox"] {
-			display: inline-block !important;
-			appearance: checkbox !important;
-			-webkit-appearance: checkbox !important;
-			width: 20px !important;
-			height: 20px !important;
-			opacity: 1 !important;
-			position: static !important;
-			margin-right: 8px !important;
-			vertical-align: middle !important;
+		/* Make the language chooser menu properly sized */
+		.menu-container .menu {
+			position: absolute !important;
+			max-height: 300px !important;
+			overflow-y: auto !important;
+			width: 300px !important;
+			z-index: 9999 !important;
+			background-color: var(--bg-color) !important;
+			border: 1px solid var(--fg-color) !important;
 		}
 
-		.checkbox label::before {
-			display: none !important;
-		}
-
-		/* Fix the header structure */
-		.options, .features {
-			display: block !important;
-			margin-bottom: 15px !important;
-			order: 2 !important;
-		}
-		
-		/* Fix specimen display */
+		/* Fix the specimen display */
 		.specimen {
 			display: flex !important;
 			flex-direction: column !important;
 		}
-		
+
 		.specimen-header {
 			display: flex !important;
 			flex-direction: column !important;
 			padding: 10px 0 !important;
 		}
-		
-		.specimen-line {
+
+		.specimen-body {
 			display: flex !important;
 			flex-direction: column !important;
+		}
+
+		.specimen-line {
+			display: grid !important;
+			grid-template-columns: 1fr !important;
+			grid-template-rows: auto auto auto !important;
 			padding: 10px 0 !important;
 			margin-bottom: 10px !important;
+			border-bottom: 1px dotted var(--fg-color) !important;
 		}
-		
+
+		/* Arrange elements in line */
 		.line-left-col, 
 		.line-middle-col, 
 		.line-right-col {
+			grid-column: 1 !important;
 			width: 100% !important;
 			padding: 5px 0 !important;
 			display: flex !important;
 			flex-wrap: wrap !important;
+			justify-content: flex-start !important;
 		}
-		
-		.line-middle-col {
-			order: -1 !important; /* Move text to the top */
+
+		/* Text area goes first */
+		.specimen-line .line-middle-col {
+			grid-row: 1 !important;
+			order: -1 !important;
+		}
+
+		/* Controls below text */
+		.specimen-line .line-left-col {
+			grid-row: 2 !important;
+		}
+
+		.specimen-line .line-right-col {
+			grid-row: 3 !important;
 		}
 	}
 	</style>
+	
 	<!-- Matomo -->
 	<script>
 		var _paq = window._paq = window._paq || [];
@@ -146,25 +154,28 @@
 			'font-family: system-ui',
 			'font-family: monospace; color: #00b47c;');
 	</script>
-	<!-- Mobile fix helper script -->
+	
+	<!-- Mobile fix helper script (included inline for reliability) -->
 	<script>
-	// Helper function to make sure text displays on mobile
+	// Simple mobile visibility fixes
 	document.addEventListener('DOMContentLoaded', function() {
-		// Run the fix periodically
-		setInterval(function() {
+		// Add visibility fix function
+		function fixVisibility() {
 			if (window.innerWidth <= 768) {
 				// Force text visibility
 				document.querySelectorAll('.specimen-line .text').forEach(function(el) {
 					el.classList.remove('hidden');
 					el.classList.add('visible');
 					el.style.opacity = '1';
+					el.style.visibility = 'visible';
+					el.style.display = 'block';
 				});
 				
 				// Hide loading indicators
 				document.querySelectorAll('.specimen-line .loading').forEach(function(el) {
 					el.classList.remove('visible');
 					el.classList.add('hidden');
-					el.style.opacity = '0';
+					el.style.display = 'none';
 				});
 				
 				// Fix menu display
@@ -172,17 +183,33 @@
 					el.style.display = 'block';
 				});
 			}
-		}, 1000);
+		}
 		
-		// Also listen for font loading
+		// Run the fix periodically
+		setInterval(fixVisibility, 500);
+		
+		// Also listen for font loading events
 		window.addEventListener('font-loaded', function() {
-			setTimeout(function() {
-				document.querySelectorAll('.specimen-line .text').forEach(function(el) {
-					el.classList.remove('hidden');
-					el.classList.add('visible');
-					el.style.opacity = '1';
-				});
-			}, 500);
+			setTimeout(fixVisibility, 200);
+			// Keep checking for a while
+			let count = 0;
+			const interval = setInterval(function() {
+				fixVisibility();
+				count++;
+				if (count > 5) clearInterval(interval);
+			}, 300);
+		});
+		
+		// Also fix when fonts are added
+		window.addEventListener('font-added', function() {
+			setTimeout(fixVisibility, 200);
+			// Keep checking for a while
+			let count = 0;
+			const interval = setInterval(function() {
+				fixVisibility();
+				count++;
+				if (count > 5) clearInterval(interval);
+			}, 300);
 		});
 	});
 	</script>
