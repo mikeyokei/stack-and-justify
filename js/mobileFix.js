@@ -1,318 +1,282 @@
-// Mobile optimizations for Stack & Justify
+// Mobile fixes for Stack & Justify
+// Add this to your js/mobileFix.js file
 
 (function() {
-  // Make handleFontFiles available to the mobileFix script
-  if (typeof window.handleFontFiles === 'undefined') {
-    window.handleFontFiles = function(files) {
-      // This will be replaced by the actual function when available
-      console.log("Trying to handle files before function is loaded");
-      
-      // Try to import the function from Fonts.js
-      import('./Fonts.js').then(module => {
-        if (typeof module.handleFontFiles === 'function') {
-          module.handleFontFiles(files);
-        }
-      }).catch(err => {
-        console.error("Error importing font handler:", err);
-      });
-    };
-  }
-  
-  // Run after a delay to ensure the Mithril app has rendered
+  // Run when DOM is loaded
   document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(initMobileOptimizations, 1000);
+    // Add mobile CSS fix directly to the document
+    addMobileCssFix();
     
-    // Update when window resizes
+    // Init optimizations after a slight delay to ensure everything is loaded
+    setTimeout(initMobileOptimizations, 500);
+    
+    // Fix font loading issues
+    fixFontLoading();
+    
+    // Add event listener for window resize
     window.addEventListener('resize', function() {
-      setTimeout(initMobileOptimizations, 300);
+      if (window.innerWidth <= 768) {
+        // Re-apply mobile optimizations on resize
+        setTimeout(initMobileOptimizations, 300);
+      }
     });
   });
-
+  
+  // Add critical CSS fixes directly to the document
+  function addMobileCssFix() {
+    const style = document.createElement('style');
+    style.textContent = `
+      @media screen and (max-width: 768px) {
+        /* CRITICAL: Fix text visibility */
+        .specimen-line .text {
+          opacity: 1 !important;
+          visibility: visible !important;
+          display: block !important;
+          min-height: 30px !important;
+        }
+        .specimen-line .text.hidden {
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+        .specimen-line .loading {
+          display: none !important;
+        }
+        
+        /* Fix menu positioning */
+        .menu-container .menu {
+          position: absolute !important;
+          z-index: 9999 !important;
+          max-height: 300px !important;
+          overflow-y: auto !important;
+          background-color: var(--bg-color) !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  
+  // Main optimization function
   function initMobileOptimizations() {
-    // Check if on mobile
-    const isMobile = window.innerWidth <= 768;
-    if (!isMobile) return;
-
-    // Add mobile class to body for CSS targeting
-    document.body.classList.add('mobile-device');
+    // Only run on mobile
+    if (window.innerWidth > 768) return;
     
     // Fix main issues
-    fixLanguageMenu();
+    fixMenus();
+    fixSpecimenDisplay();
     makeTouchTargetsLarger();
-    addSwipeGestures();
-    fixFontLoading();
-    fixMenuDisplay();
-    
-    // Fix the duplicate buttons issue by removing any existing buttons first
-    fixMobileFileSelection();
+    fixVisibility();
+    fixMobileButtons();
   }
-
-  // Fix the language menu
-  function fixLanguageMenu() {
-    // Look for the options menu
-    const optionsBtn = document.querySelector('.options button');
-    if (optionsBtn) {
-      // Force the menu open
-      const menuContainer = optionsBtn.closest('.menu-container');
-      if (menuContainer) {
-        const menu = menuContainer.querySelector('.menu');
-        if (menu) {
-          menu.style.visibility = 'visible';
-          menu.style.position = 'relative';
-          menu.style.margin = '10px 0';
-          menu.style.maxHeight = '300px';
-          menu.style.overflow = 'auto';
-          
-          // Fix checkboxes
-          const checkboxes = menu.querySelectorAll('input[type="checkbox"]');
-          checkboxes.forEach(checkbox => {
-            checkbox.style.display = 'inline-block';
-            checkbox.style.width = '20px';
-            checkbox.style.height = '20px';
-            checkbox.style.opacity = '1';
-            checkbox.style.appearance = 'checkbox';
-            checkbox.style.webkitAppearance = 'checkbox';
-          });
-        }
-      }
-    }
-  }
-
-  // Make touch targets larger
-  function makeTouchTargetsLarger() {
-    const touchElements = document.querySelectorAll('button, .font-item, .line-left-col, .line-right-col');
+  
+  // Ensure font loading properly shows text
+  function fixFontLoading() {
+    // Fix every font-loaded event
+    window.addEventListener('font-loaded', function(e) {
+      console.log('Font loaded event detected');
+      // Give some time for the DOM to update
+      setTimeout(fixVisibility, 200);
+      
+      // Additional periodic checks for visibility
+      let checkCount = 0;
+      const visibilityInterval = setInterval(function() {
+        fixVisibility();
+        checkCount++;
+        if (checkCount > 5) clearInterval(visibilityInterval);
+      }, 300);
+    });
     
-    touchElements.forEach(el => {
-      el.style.minHeight = '44px';
-      el.style.minWidth = '44px';
-      el.style.padding = el.style.padding || '10px';
+    // Also check when fonts get added
+    window.addEventListener('font-added', function(e) {
+      console.log('Font added event detected');
+      setTimeout(fixVisibility, 200);
     });
   }
-
-  // Add swipe gestures for line manipulation
-  function addSwipeGestures() {
-    document.addEventListener('touchstart', handleTouchStart, false);
-    document.addEventListener('touchmove', handleTouchMove, false);
-    
-    let xDown = null;
-    let yDown = null;
-    let currentLine = null;
-    
-    function handleTouchStart(evt) {
-      const lineEl = evt.target.closest('.specimen-line');
-      if (!lineEl) return;
+  
+  // Fix the menu display on mobile
+  function fixMenus() {
+    // Show options and features menus
+    const menus = document.querySelectorAll('.options, .features');
+    menus.forEach(menu => {
+      menu.style.display = 'block';
       
-      currentLine = lineEl;
-      xDown = evt.touches[0].clientX;
-      yDown = evt.touches[0].clientY;
+      // Fix menu button clicks
+      const menuBtn = menu.querySelector('.menu-button');
+      if (menuBtn) {
+        menuBtn.addEventListener('click', function() {
+          const menuContent = menu.querySelector('.menu');
+          if (menuContent) {
+            // Toggle visibility
+            if (menuContent.style.visibility === 'visible') {
+              menuContent.style.visibility = 'hidden';
+            } else {
+              // Position menu properly
+              menuContent.style.visibility = 'visible';
+              menuContent.style.maxHeight = '300px';
+              menuContent.style.overflow = 'auto';
+              menuContent.style.zIndex = '9999';
+            }
+          }
+        });
+      }
+    });
+    
+    // Fix checkbox display in menus
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      checkbox.style.display = 'inline-block';
+      checkbox.style.appearance = 'checkbox';
+      checkbox.style.webkitAppearance = 'checkbox';
+      checkbox.style.opacity = '1';
+    });
+  }
+  
+  // Fix specimen display for mobile
+  function fixSpecimenDisplay() {
+    // Modify specimen layout for mobile
+    const specimen = document.querySelector('.specimen');
+    if (specimen) {
+      specimen.style.display = 'flex';
+      specimen.style.flexDirection = 'column';
     }
     
-    function handleTouchMove(evt) {
-      if (!xDown || !yDown || !currentLine) return;
-      
-      const xUp = evt.touches[0].clientX;
-      const yUp = evt.touches[0].clientY;
-      
-      const xDiff = xDown - xUp;
-      const yDiff = yDown - yUp;
-      
-      // Horizontal swipe detection (only if not scrolling vertically)
-      if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
-        if (xDiff > 0) {
-          // Swipe left - delete
-          const deleteBtn = currentLine.querySelector('.update-button');
-          if (deleteBtn) {
-            deleteBtn.click();
-          }
-        } else {
-          // Swipe right - copy
-          const copyBtn = currentLine.querySelector('.copy-button');
-          if (copyBtn) {
-            copyBtn.click();
-          }
+    // Fix specimen lines layout
+    const specimenLines = document.querySelectorAll('.specimen-line');
+    specimenLines.forEach(line => {
+      rearrangeLine(line);
+    });
+    
+    // Observer for new lines added to the DOM
+    const observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length) {
+          mutation.addedNodes.forEach(function(node) {
+            if (node.classList && node.classList.contains('specimen-line')) {
+              rearrangeLine(node);
+            }
+          });
         }
-        
-        // Show feedback
-        const feedback = document.createElement('div');
-        feedback.style.position = 'fixed';
-        feedback.style.top = '50%';
-        feedback.style.left = '50%';
-        feedback.style.transform = 'translate(-50%, -50%)';
-        feedback.style.background = 'rgba(0,0,0,0.7)';
-        feedback.style.color = 'white';
-        feedback.style.padding = '10px';
-        feedback.style.borderRadius = '5px';
-        feedback.style.zIndex = '1000';
-        feedback.textContent = xDiff > 0 ? 'Line Deleted' : 'Text Copied';
-        
-        document.body.appendChild(feedback);
-        setTimeout(() => {
-          document.body.removeChild(feedback);
-        }, 1000);
-      }
-      
-      // Reset values
-      xDown = null;
-      yDown = null;
-      currentLine = null;
+      });
+    });
+    
+    // Start observing the specimen body
+    const specimenBody = document.querySelector('.specimen-body');
+    if (specimenBody) {
+      observer.observe(specimenBody, { childList: true });
     }
   }
   
-  // Fix the duplicate Select Font Files buttons
-  function fixMobileFileSelection() {
-    const dropMsg = document.querySelector('.drop-message');
-    if (!dropMsg) return;
-    
-    // Remove any existing mobile selection buttons
-    const existingButtons = dropMsg.querySelectorAll('button.drop-btn');
-    existingButtons.forEach(btn => {
-      if (btn.textContent.includes('Select Font Files')) {
-        btn.remove();
+  // Rearrange elements in a specimen line for mobile
+  function rearrangeLine(line) {
+    const middleCol = line.querySelector('.line-middle-col');
+    if (middleCol) {
+      // Move text to the top
+      middleCol.style.order = '-1';
+      middleCol.style.gridRow = '1';
+      
+      // Fix text visibility in this line
+      const text = middleCol.querySelector('.text');
+      if (text) {
+        text.classList.remove('hidden');
+        text.classList.add('visible');
+        text.style.opacity = '1';
+        text.style.visibility = 'visible';
+        text.style.display = 'block';
+        text.style.width = '100%';
       }
-    });
-    
-    // Remove any existing mobile file inputs
-    const existingFileInputs = dropMsg.querySelectorAll('input[type="file"]#mobile-font-input');
-    existingFileInputs.forEach(input => {
-      input.remove();
-    });
-    
-    // Create a new file input button
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.multiple = true;
-    fileInput.accept = '.ttf,.otf,.woff,.woff2';
-    fileInput.style.display = 'none';
-    fileInput.id = 'mobile-font-input';
-    
-    const selectBtn = document.createElement('button');
-    selectBtn.textContent = 'Select Font Files';
-    selectBtn.classList.add('drop-btn');
-    selectBtn.style.display = 'block';
-    selectBtn.style.width = '100%';
-    selectBtn.style.margin = '10px 0';
-    selectBtn.style.padding = '12px 20px';
-    selectBtn.style.textAlign = 'center';
-    selectBtn.style.backgroundColor = 'var(--green)';
-    selectBtn.style.color = 'white';
-    selectBtn.style.border = 'none';
-    selectBtn.style.borderRadius = '4px';
-    
-    selectBtn.addEventListener('click', () => {
-      fileInput.click();
-    });
-    
-    // Append to drop message area
-    dropMsg.appendChild(fileInput);
-    dropMsg.appendChild(selectBtn);
-    
-    // Connect file input to the app
-    fileInput.addEventListener('change', (e) => {
-      console.log("File selected:", e.target.files);
-      if (e.target.files && e.target.files.length > 0) {
-        // Try to access the font handling function
-        if (typeof window.handleFontFiles === 'function') {
-          window.handleFontFiles(e.target.files);
-        } else if (window.Fonts && typeof window.Fonts.handleFontFiles === 'function') {
-          window.Fonts.handleFontFiles(e.target.files);
-        } else {
-          // Last resort - try to import it directly
-          import('./Fonts.js').then(module => {
-            if (typeof module.handleFontFiles === 'function') {
-              module.handleFontFiles(e.target.files);
-            } else {
-              console.error("Font handler function not found");
-            }
-          }).catch(err => {
-            console.error("Cannot import Fonts.js:", err);
-          });
-        }
+      
+      // Hide loading indicator
+      const loading = middleCol.querySelector('.loading');
+      if (loading) {
+        loading.classList.remove('visible');
+        loading.classList.add('hidden');
+        loading.style.display = 'none';
       }
-    });
-    
-    // Make sure the original form input also works
-    const originalFileInput = document.getElementById('file-upload');
-    if (originalFileInput) {
-      originalFileInput.addEventListener('change', (e) => {
-        if (e.target.files && e.target.files.length > 0) {
-          if (typeof window.handleFontFiles === 'function') {
-            window.handleFontFiles(e.target.files);
-          }
-        }
-      });
     }
     
-    // At load, try to expose functions between modules
-    if (window.Fonts && typeof window.Fonts.handleFontFiles === 'function') {
-      window.handleFontFiles = window.Fonts.handleFontFiles;
+    // Adjust left column
+    const leftCol = line.querySelector('.line-left-col');
+    if (leftCol) {
+      leftCol.style.gridRow = '2';
+    }
+    
+    // Adjust right column
+    const rightCol = line.querySelector('.line-right-col');
+    if (rightCol) {
+      rightCol.style.gridRow = '3';
     }
   }
-
-  // Function to fix text visibility issues on mobile
-  function fixTextVisibility() {
-    // Only run on mobile devices
-    if (window.innerWidth > 768) return;
-    
-    // Force text elements to be visible on mobile
+  
+  // Make touch targets larger for mobile
+  function makeTouchTargetsLarger() {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+      btn.style.minHeight = '44px';
+      btn.style.minWidth = '44px';
+      btn.style.padding = '8px';
+    });
+  }
+  
+  // Fix visibility issues with text elements
+  function fixVisibility() {
+    console.log('Fixing visibility');
+    // Fix all text elements
     const textElements = document.querySelectorAll('.specimen-line .text');
     textElements.forEach(el => {
       el.classList.remove('hidden');
       el.classList.add('visible');
-      
-      // Make the text visible even if class change doesn't work
       el.style.opacity = '1';
       el.style.visibility = 'visible';
       el.style.display = 'block';
     });
     
-    // Hide loading indicators
+    // Hide all loading indicators
     const loadingElements = document.querySelectorAll('.specimen-line .loading');
     loadingElements.forEach(el => {
       el.classList.remove('visible');
       el.classList.add('hidden');
-      
-      // Force hide loading indicators
-      el.style.opacity = '0';
-      el.style.visibility = 'hidden';
       el.style.display = 'none';
     });
   }
-
-  // Fix font loading issues
-  function fixFontLoading() {
-    // Listen for font loading events
-    window.addEventListener('font-loaded', function(e) {
-      console.log('Font loaded event received, fixing visibility');
-      setTimeout(fixTextVisibility, 300); // Add delay to ensure DOM updates
-    });
-    
-    // Also check periodically for a few seconds after font loading
-    let checkCounter = 0;
-    const checkInterval = setInterval(function() {
-      fixTextVisibility();
-      checkCounter++;
-      if (checkCounter > 10) clearInterval(checkInterval);
-    }, 500);
-  }
-
-  // Fix menu display issues
-  function fixMenuDisplay() {
-    const optionsMenus = document.querySelectorAll('.options, .features');
-    optionsMenus.forEach(menu => {
-      menu.style.display = 'block';
-      const menuBtn = menu.querySelector('.menu-button');
-      if (menuBtn) {
-        menuBtn.addEventListener('click', function() {
-          // Force proper menu size and scrollability
-          const menuContent = menu.querySelector('.menu');
-          if (menuContent) {
-            menuContent.style.visibility = 'visible';
-            menuContent.style.position = 'relative';
-            menuContent.style.maxHeight = '300px';
-            menuContent.style.overflowY = 'auto';
+  
+  // Fix mobile buttons (font selection, etc)
+  function fixMobileButtons() {
+    // Improve font selection button
+    const dropMsg = document.querySelector('.drop-message');
+    if (dropMsg) {
+      // Look for existing mobile font selection button
+      let selectBtn = dropMsg.querySelector('.mobile-font-btn');
+      
+      // Create new button if it doesn't exist
+      if (!selectBtn) {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.multiple = true;
+        fileInput.accept = '.ttf,.otf,.woff,.woff2';
+        fileInput.style.display = 'none';
+        fileInput.id = 'mobile-font-input';
+        
+        selectBtn = document.createElement('button');
+        selectBtn.textContent = 'Select Font Files';
+        selectBtn.classList.add('drop-btn', 'mobile-font-btn');
+        
+        selectBtn.addEventListener('click', () => {
+          fileInput.click();
+        });
+        
+        // Connect file input to the app
+        fileInput.addEventListener('change', (e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            // Use the global handler
+            if (typeof window.handleFontFiles === 'function') {
+              window.handleFontFiles(e.target.files);
+            }
           }
         });
+        
+        // Add to DOM
+        dropMsg.appendChild(fileInput);
+        dropMsg.appendChild(selectBtn);
       }
-    });
+    }
   }
 })();
