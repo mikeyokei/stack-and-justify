@@ -1,14 +1,12 @@
-/* Mobile menu fix for Stack & Justify */
-
+/* Fix for mobile issues - Stack & Justify */
 @media screen and (max-width: 768px) {
-  /* Fix the oversized language menu */
+  /* Fix the menu display on mobile */
   .menu-container .menu {
     position: relative !important;
     max-height: 300px !important;
     overflow-y: auto !important;
     border: 1px solid var(--fg-color) !important;
     border-radius: 4px !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
     margin: 10px 0 !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -20,7 +18,25 @@
     overflow-y: auto !important;
   }
 
-  /* Make checkboxes visible and properly sized */
+  /* Fix text visibility */
+  .specimen-line .text {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    overflow-wrap: break-word !important;
+    width: 100% !important;
+  }
+  
+  .specimen-line .loading {
+    display: none !important;
+  }
+  
+  .line-middle-col {
+    width: 100% !important;
+    overflow: visible !important;
+  }
+
+  /* Fix checkboxes */
   input[type="checkbox"] {
     display: inline-block !important;
     appearance: checkbox !important;
@@ -33,31 +49,24 @@
     vertical-align: middle !important;
   }
 
+  .checkbox label::before {
+    display: none !important;
+  }
+
   /* Better spacing for menu items */
   .checkbox {
     padding: 8px !important;
     margin-bottom: 0 !important;
   }
 
-  /* Make sure specimen lines display properly */
-  .specimen-line {
-    padding: 10px 0 !important;
+  /* Fix the header structure */
+  .options, .features {
+    display: block !important;
+    margin-bottom: 15px !important;
+    order: 2 !important;
   }
 
-  .line-middle-col .text {
-    display: block !important;
-    width: 100% !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-  
-  /* Fix the width input on mobile */
-  .width-input {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-  
-  /* Make the update and options buttons more visible */
+  /* Make the update button more visible */
   .menu-update button {
     display: block !important;
     width: 100% !important;
@@ -66,5 +75,37 @@
     background-color: var(--green) !important;
     color: white !important;
     border-radius: 4px !important;
+  }
+  
+  /* Fix specimen display */
+  .specimen {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .specimen-header {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 10px 0 !important;
+  }
+  
+  .specimen-line {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 10px 0 !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .line-left-col, 
+  .line-middle-col, 
+  .line-right-col {
+    width: 100% !important;
+    padding: 5px 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+  }
+  
+  .line-middle-col {
+    order: -1 !important; /* Move text to the top */
   }
 }
