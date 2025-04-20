@@ -1,0 +1,146 @@
+/* Mobile optimizations for Stack & Justify */
+
+/* Base mobile styles */
+@media screen and (max-width: 768px) {
+  /* General styles */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Increase touch targets for better usability */
+  button, 
+  select, 
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Adjust font size for readability */
+  body {
+    font-size: 16px; /* Minimum recommended font size for mobile */
+  }
+  
+  /* Layout adjustments */
+  .layout-container {
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  /* Make menus more touch-friendly */
+  .menu-item {
+    padding: 12px 8px;
+  }
+  
+  /* Font selection improvements */
+  .font-select {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Control panel adjustments */
+  .control-panel {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    width: 100%;
+  }
+  
+  /* Make inputs full width on mobile */
+  input[type="text"],
+  input[type="number"],
+  select {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+  }
+  
+  /* Improve line display for small screens */
+  .line-container {
+    padding: 10px 5px;
+    margin-bottom: 15px;
+  }
+  
+  /* Adjust buttons for mobile */
+  .action-button {
+    margin: 5px;
+    padding: 10px 15px;
+  }
+  
+  /* Collapsible sections for space saving */
+  .collapsible-section {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  
+  .collapsible-header {
+    padding: 12px;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .collapsible-content {
+    padding: 12px;
+    display: none;
+  }
+  
+  .collapsible-content.open {
+    display: block;
+  }
+  
+  /* Feature menu improvements */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  /* Improved dropzone for files */
+  .dropzone {
+    padding: 20px;
+    text-align: center;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    margin: 15px 0;
+  }
+  
+  /* Better spacing for text display */
+  .output-text {
+    line-height: 1.5;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* Small phones optimization */
+@media screen and (max-width: 480px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Simplified controls for very small screens */
+  .compact-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* Stack buttons vertically */
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .button-group button {
+    margin: 3px 0;
+  }
+}
