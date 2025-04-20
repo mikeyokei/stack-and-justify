@@ -13,26 +13,45 @@
     margin-bottom: 1rem;
   }
 
-  /* Make the drop message more visible */
+  /* Fix the drop message */
   .drop-message {
     display: block;
     width: 100%;
     margin: 10px 0;
+    order: 2; /* Ensure the drop message appears in a consistent place */
+  }
+
+  /* Replace multiple Select Font Files buttons with single styled button */
+  .drop-message button.drop-btn {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    text-align: center;
+    background-color: var(--green);
+    color: white;
+    border: none;
+    border-radius: 4px;
   }
 
   /* Fix the specimen layout */
   .specimen {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
   .specimen-header {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
   }
 
   .specimen-line {
     display: flex;
     flex-direction: column;
     padding: 1rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px dotted var(--fg-color);
   }
 
   .line-left-col, 
@@ -57,50 +76,22 @@
     width: 100%;
   }
 
-  /* Improve font items scrolling */
-  .font-items {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .font-items-scroller {
-    padding: 0.5rem 0;
-  }
-
-  .font-item {
-    padding: 0.5rem;
-    margin-right: 0.5rem;
-  }
-
-  /* Make the menu more accessible */
-  .menu {
-    position: static;
-    left: 0;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-    visibility: visible !important;
-    display: block !important;
-  }
-
-  .submenu-content {
-    max-height: none !important;
-    display: block !important;
-    overflow: visible !important;
-  }
-
-  /* Improve checkbox visibility */
+  /* Fix checkboxes in all menus */
   input[type="checkbox"] {
     display: inline-block !important;
-    width: 20px !important;
-    height: 20px !important;
-    opacity: 1 !important;
-    position: relative !important;
-    vertical-align: middle !important;
     appearance: checkbox !important;
     -webkit-appearance: checkbox !important;
+    opacity: 1 !important;
+    width: 20px !important;
+    height: 20px !important;
+    position: relative !important;
+    vertical-align: middle !important;
     margin-right: 8px !important;
+  }
+
+  /* Disable custom checkbox styling */
+  .checkbox label::before {
+    display: none !important;
   }
 
   .checkbox {
@@ -109,97 +100,79 @@
 
   .checkbox label {
     display: inline-block;
-    vertical-align: middle;
+    padding-left: 0 !important;
   }
 
-  .checkbox label::before {
-    display: none !important;
+  /* Fix menu display on mobile */
+  .menu-container .menu {
+    position: static !important;
+    width: 100% !important;
+    max-height: none !important;
+    margin: 10px 0 !important;
+    overflow: visible !important;
+    border: 1px solid var(--fg-color) !important;
+    border-radius: 4px !important;
+    padding: 10px !important;
+    box-sizing: border-box !important;
   }
 
-  /* Add swipe hints */
-  .specimen-line {
-    position: relative;
+  .submenu {
+    margin-bottom: 10px !important;
   }
 
-  .specimen-line::before {
-    content: "Swipe left to delete • Swipe right to copy";
-    font-size: 0.8rem;
-    color: var(--grey);
-    text-align: center;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 0.25rem 0;
-    opacity: 0.7;
+  .submenu-content {
+    max-height: none !important;
+    display: block !important;
+    overflow: visible !important;
   }
 
-  /* Fix tooltips on mobile */
-  .tooltip {
-    display: none !important;
+  /* Ensure menus are visible */
+  .options, .features {
+    display: block !important;
+    margin-bottom: 15px !important;
   }
 
-  /* Fix width input to be more touch-friendly */
-  .width-input {
-    padding: 10px 0;
-    height: auto;
+  /* Fix font selection */
+  select {
+    appearance: menulist !important;
+    -webkit-appearance: menulist !important;
+    background-color: transparent !important;
+    border: 1px solid var(--fg-color) !important;
+    padding: 8px !important;
+    display: block !important;
+    width: auto !important;
+    max-width: 100% !important;
   }
 
-  .width-input-handle {
-    padding: 10px;
-    width: 20px !important;
-    height: 30px !important;
+  /* Fix the new line button */
+  .new-line {
+    padding: 15px 0;
   }
 
-  /* Add a custom mobile font selection button */
-  .mobile-font-selector {
+  .new-line-button {
     display: block;
     width: 100%;
-    margin: 10px 0;
-    padding: 10px;
+    padding: 15px;
+    text-align: center;
     background-color: var(--grey-light);
     border: 1px solid var(--fg-color);
     border-radius: 4px;
   }
 
-  /* Make dropzone visible for mobile */
-  .drop-zone.active {
-    z-index: 1000;
+  /* Hide tooltips on mobile */
+  .tooltip {
+    display: none !important;
   }
-  
-  /* Make language menu accessible */
-  .menu-container.options .menu {
-    position: static !important;
-    display: block !important;
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
-    width: 100% !important;
-    max-height: none !important;
-    overflow: visible !important;
-  }
-  
-  /* Fix select styling on mobile */
-  select {
-    width: auto !important;
-    max-width: 100% !important;
-    appearance: menulist !important;
-    -webkit-appearance: menulist !important;
-    display: inline-block !important;
-    padding: 5px !important;
-    background-color: transparent !important;
-    border: 1px solid var(--fg-color) !important;
-  }
-  
-  /* Fix new line button */
-  .new-line {
-    padding: 15px 0;
-  }
-  
-  .new-line-button {
+
+  /* Add swipe hints */
+  .specimen-line::after {
+    content: "Swipe left to delete • Swipe right to copy";
     display: block;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--grey);
+    padding: 5px 0;
+    margin-top: 5px;
     width: 100%;
-    padding: 10px;
-    border: 1px solid var(--fg-color);
-    border-radius: 4px;
   }
 }
