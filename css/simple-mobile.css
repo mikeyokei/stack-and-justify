@@ -1,0 +1,138 @@
+/* Simple mobile optimizations for Stack & Justify */
+
+@media screen and (max-width: 768px) {
+  /* Basic responsive layout */
+  body {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Make the app container fit the screen */
+  #app {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  /* Improve menu visibility and interaction */
+  .menu {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 0;
+  }
+
+  .menu-item {
+    display: inline-block;
+    padding: 10px;
+    margin-right: 5px;
+  }
+
+  /* Fix input fields and controls */
+  input, select, button {
+    min-height: 44px; /* Minimum touch target size */
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Make language selection always visible and accessible */
+  .languages-container {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f5f5f5;
+  }
+
+  /* Make language checkboxes easier to tap */
+  .language-checkbox {
+    margin: 10px 0;
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+  }
+
+  .language-checkbox input {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Make line containers responsive */
+  .line-container {
+    width: 100%;
+    margin-bottom: 20px;
+    overflow-x: auto;
+  }
+
+  /* Make text elements wrap properly */
+  .text-display {
+    word-break: break-word;
+    white-space: normal;
+  }
+
+  /* Adjust font size display for mobile */
+  .font-size-input {
+    width: calc(100% - 60px);
+    display: inline-block;
+  }
+
+  /* Improve action buttons */
+  .action-button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  /* Make dropzone more mobile-friendly */
+  .dropzone {
+    padding: 15px;
+    border: 2px dashed #ccc;
+    text-align: center;
+    margin: 15px 0;
+  }
+
+  /* Fix bottom action bar */
+  .action-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 10px;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .action-bar button {
+    flex: 1;
+    margin: 0 5px;
+    min-height: 44px;
+  }
+
+  /* Add some bottom padding to prevent content being hidden by action bar */
+  body {
+    padding-bottom: 60px;
+  }
+}
