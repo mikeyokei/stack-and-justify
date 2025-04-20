@@ -1,17 +1,28 @@
 // Mobile optimizations for Stack & Justify
-// This consolidated file fixes mobile-specific issues
 
 (function() {
   // Make handleFontFiles available to the mobileFix script
-  window.handleFontFiles = window.handleFontFiles || function() {
-    console.error("Font handling function not loaded yet");
-  };
-
-  // Run after a slight delay to ensure the Mithril app has rendered
+  if (typeof window.handleFontFiles === 'undefined') {
+    window.handleFontFiles = function(files) {
+      // This will be replaced by the actual function when available
+      console.log("Trying to handle files before function is loaded");
+      
+      // Try to import the function from Fonts.js
+      import('./Fonts.js').then(module => {
+        if (typeof module.handleFontFiles === 'function') {
+          module.handleFontFiles(files);
+        }
+      }).catch(err => {
+        console.error("Error importing font handler:", err);
+      });
+    };
+  }
+  
+  // Run after a delay to ensure the Mithril app has rendered
   document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(initMobileOptimizations, 1000); // Increased delay for app to initialize
-
-    // Also refresh on resize
+    setTimeout(initMobileOptimizations, 1000);
+    
+    // Update when window resizes
     window.addEventListener('resize', function() {
       setTimeout(initMobileOptimizations, 300);
     });
@@ -29,53 +40,48 @@
     fixLanguageMenu();
     makeTouchTargetsLarger();
     addSwipeGestures();
-    improveDropZone();
-    improveFileSelection(); // New function to ensure file selection works
+    
+    // Fix the duplicate buttons issue by removing any existing buttons first
+    fixMobileFileSelection();
   }
 
   // Fix the language menu
   function fixLanguageMenu() {
-    // Force language menu to be visible on mobile
-    const optionsMenu = document.querySelector('.options');
-    if (optionsMenu) {
-      const optionsButton = optionsMenu.querySelector('.menu-button');
-      const menu = optionsMenu.querySelector('.menu');
-
-      if (menu) {
-        // Create a more accessible language menu for mobile
-        menu.style.position = 'static';
-        menu.style.visibility = 'visible';
-        menu.style.maxHeight = 'none';
-        menu.style.overflow = 'visible';
-        menu.style.border = '1px solid var(--fg-color)';
-        menu.style.marginTop = '10px';
-        menu.style.marginBottom = '10px';
-        menu.style.padding = '10px';
-        menu.style.boxSizing = 'border-box';
-        
-        // Fix checkbox display
-        const checkboxes = menu.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-          checkbox.style.display = 'inline-block';
-          checkbox.style.width = '20px';
-          checkbox.style.height = '20px';
-          checkbox.style.marginRight = '8px';
-          checkbox.style.appearance = 'checkbox';
-          checkbox.style.webkitAppearance = 'checkbox';
-          checkbox.style.opacity = '1';
-          checkbox.style.pointerEvents = 'auto';
-        });
+    // Look for the options menu
+    const optionsBtn = document.querySelector('.options button');
+    if (optionsBtn) {
+      // Force the menu open
+      const menuContainer = optionsBtn.closest('.menu-container');
+      if (menuContainer) {
+        const menu = menuContainer.querySelector('.menu');
+        if (menu) {
+          menu.style.visibility = 'visible';
+          menu.style.position = 'static';
+          menu.style.margin = '10px 0';
+          menu.style.maxHeight = 'none';
+          menu.style.overflow = 'visible';
+          
+          // Fix checkboxes
+          const checkboxes = menu.querySelectorAll('input[type="checkbox"]');
+          checkboxes.forEach(checkbox => {
+            checkbox.style.display = 'inline-block';
+            checkbox.style.width = '20px';
+            checkbox.style.height = '20px';
+            checkbox.style.opacity = '1';
+            checkbox.style.appearance = 'checkbox';
+            checkbox.style.webkitAppearance = 'checkbox';
+          });
+        }
       }
     }
   }
 
-  // Make touch targets larger for better mobile usability
+  // Make touch targets larger
   function makeTouchTargetsLarger() {
-    // Increase size of buttons and interactive elements
     const touchElements = document.querySelectorAll('button, .font-item, .line-left-col, .line-right-col');
     
     touchElements.forEach(el => {
-      el.style.minHeight = '44px'; // Apple's recommended minimum
+      el.style.minHeight = '44px';
       el.style.minWidth = '44px';
       el.style.padding = el.style.padding || '10px';
     });
@@ -91,7 +97,6 @@
     let currentLine = null;
     
     function handleTouchStart(evt) {
-      // Find if we're touching a line
       const lineEl = evt.target.closest('.specimen-line');
       if (!lineEl) return;
       
@@ -112,13 +117,13 @@
       // Horizontal swipe detection (only if not scrolling vertically)
       if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
         if (xDiff > 0) {
-          // Swipe left - delete line
-          const removeBtn = currentLine.querySelector('.update-button');
-          if (removeBtn) {
-            removeBtn.click();
+          // Swipe left - delete
+          const deleteBtn = currentLine.querySelector('.update-button');
+          if (deleteBtn) {
+            deleteBtn.click();
           }
         } else {
-          // Swipe right - copy text
+          // Swipe right - copy
           const copyBtn = currentLine.querySelector('.copy-button');
           if (copyBtn) {
             copyBtn.click();
@@ -150,78 +155,92 @@
       currentLine = null;
     }
   }
-
-  // Improve the font drop zone for mobile
-  function improveDropZone() {
+  
+  // Fix the duplicate Select Font Files buttons
+  function fixMobileFileSelection() {
     const dropMsg = document.querySelector('.drop-message');
+    if (!dropMsg) return;
     
-    if (dropMsg) {
-      // Create a more visible file input button for mobile users
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.multiple = true;
-      fileInput.accept = '.ttf,.otf,.woff,.woff2';
-      fileInput.style.display = 'none';
-      fileInput.id = 'mobile-font-input';
-      
-      const selectBtn = document.createElement('button');
-      selectBtn.textContent = 'Select Font Files';
-      selectBtn.style.display = 'block';
-      selectBtn.style.width = '100%';
-      selectBtn.style.margin = '10px 0';
-      selectBtn.style.padding = '12px 20px';
-      selectBtn.style.backgroundColor = 'var(--green)';
-      selectBtn.style.color = 'white';
-      selectBtn.style.border = 'none';
-      selectBtn.style.borderRadius = '4px';
-      selectBtn.className = 'drop-btn';
-      
-      selectBtn.addEventListener('click', () => {
-        fileInput.click();
-      });
-      
-      // Append to drop message area
-      dropMsg.appendChild(fileInput);
-      dropMsg.appendChild(selectBtn);
-      
-      // Connect file input to the app
-      fileInput.addEventListener('change', (e) => {
-        console.log("File selected:", e.target.files);
+    // Remove any existing mobile selection buttons
+    const existingButtons = dropMsg.querySelectorAll('button.drop-btn');
+    existingButtons.forEach(btn => {
+      if (btn.textContent.includes('Select Font Files')) {
+        btn.remove();
+      }
+    });
+    
+    // Remove any existing mobile file inputs
+    const existingFileInputs = dropMsg.querySelectorAll('input[type="file"]#mobile-font-input');
+    existingFileInputs.forEach(input => {
+      input.remove();
+    });
+    
+    // Create a new file input button
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.multiple = true;
+    fileInput.accept = '.ttf,.otf,.woff,.woff2';
+    fileInput.style.display = 'none';
+    fileInput.id = 'mobile-font-input';
+    
+    const selectBtn = document.createElement('button');
+    selectBtn.textContent = 'Select Font Files';
+    selectBtn.classList.add('drop-btn');
+    selectBtn.style.display = 'block';
+    selectBtn.style.width = '100%';
+    selectBtn.style.margin = '10px 0';
+    selectBtn.style.padding = '12px 20px';
+    selectBtn.style.textAlign = 'center';
+    selectBtn.style.backgroundColor = 'var(--green)';
+    selectBtn.style.color = 'white';
+    selectBtn.style.border = 'none';
+    selectBtn.style.borderRadius = '4px';
+    
+    selectBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+    
+    // Append to drop message area
+    dropMsg.appendChild(fileInput);
+    dropMsg.appendChild(selectBtn);
+    
+    // Connect file input to the app
+    fileInput.addEventListener('change', (e) => {
+      console.log("File selected:", e.target.files);
+      if (e.target.files && e.target.files.length > 0) {
+        // Try to access the font handling function
+        if (typeof window.handleFontFiles === 'function') {
+          window.handleFontFiles(e.target.files);
+        } else if (window.Fonts && typeof window.Fonts.handleFontFiles === 'function') {
+          window.Fonts.handleFontFiles(e.target.files);
+        } else {
+          // Last resort - try to import it directly
+          import('./Fonts.js').then(module => {
+            if (typeof module.handleFontFiles === 'function') {
+              module.handleFontFiles(e.target.files);
+            } else {
+              console.error("Font handler function not found");
+            }
+          }).catch(err => {
+            console.error("Cannot import Fonts.js:", err);
+          });
+        }
+      }
+    });
+    
+    // Make sure the original form input also works
+    const originalFileInput = document.getElementById('file-upload');
+    if (originalFileInput) {
+      originalFileInput.addEventListener('change', (e) => {
         if (e.target.files && e.target.files.length > 0) {
-          // First try to access the handleFontFiles function
           if (typeof window.handleFontFiles === 'function') {
             window.handleFontFiles(e.target.files);
-          } else {
-            // If function isn't available directly, try to import it
-            import('./Fonts.js').then(module => {
-              if (typeof module.handleFontFiles === 'function') {
-                module.handleFontFiles(e.target.files);
-              } else {
-                console.error("handleFontFiles function not found");
-              }
-            }).catch(err => {
-              console.error("Error importing Fonts.js:", err);
-            });
           }
         }
       });
     }
-  }
-
-  // Ensure file selection works properly
-  function improveFileSelection() {
-    // Add an additional direct file input for the form
-    const fileUpload = document.getElementById('file-upload');
-    if (fileUpload) {
-      fileUpload.addEventListener('change', (e) => {
-        console.log("Regular file input change:", e.target.files);
-        if (e.target.files && e.target.files.length > 0 && typeof window.handleFontFiles === 'function') {
-          window.handleFontFiles(e.target.files);
-        }
-      });
-    }
-
-    // Expose handleFontFiles to window for mobile support
+    
+    // At load, try to expose functions between modules
     if (window.Fonts && typeof window.Fonts.handleFontFiles === 'function') {
       window.handleFontFiles = window.Fonts.handleFontFiles;
     }
