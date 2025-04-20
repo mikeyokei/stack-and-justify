@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.12
+
+### Added
+- Add support for Vietnamese language
+
+### Fixed
+- Minor improvements in text handling
+
+
 ## 1.10
 
 ### Added
