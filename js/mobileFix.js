@@ -1,10 +1,15 @@
 // Mobile optimizations for Stack & Justify
-// This consolidated file replaces the previous mobileFix.js and mobileOptimizations.js
+// This consolidated file fixes mobile-specific issues
 
 (function() {
+  // Make handleFontFiles available to the mobileFix script
+  window.handleFontFiles = window.handleFontFiles || function() {
+    console.error("Font handling function not loaded yet");
+  };
+
   // Run after a slight delay to ensure the Mithril app has rendered
   document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(initMobileOptimizations, 500);
+    setTimeout(initMobileOptimizations, 1000); // Increased delay for app to initialize
 
     // Also refresh on resize
     window.addEventListener('resize', function() {
@@ -25,71 +30,42 @@
     makeTouchTargetsLarger();
     addSwipeGestures();
     improveDropZone();
-    createCollapsibleSections();
+    improveFileSelection(); // New function to ensure file selection works
   }
 
-  // Fix the language menu - this is high priority
+  // Fix the language menu
   function fixLanguageMenu() {
-    // Try to find the language menu or dropdown
-    const languageMenus = [
-      document.querySelector('.language-menu'),
-      document.querySelector('[data-menu="languages"]'),
-      document.querySelector('.menu-container .submenu'),
-      document.querySelector('.options button')
-    ];
-    
-    // Find the first valid menu element
-    const languageMenu = languageMenus.find(menu => menu !== null);
-    
-    if (languageMenu) {
-      // Make language container visible if it exists
-      const languageContainer = document.querySelector('.languages-container') || 
-                               document.querySelector('.submenu-content') ||
-                               document.querySelector('.menu');
-                               
-      if (languageContainer) {
-        // Make it visible and accessible
-        languageContainer.style.display = 'block';
-        languageContainer.style.position = 'relative';
-        languageContainer.style.maxHeight = 'none';
-        languageContainer.style.overflow = 'visible';
-        languageContainer.style.zIndex = '100';
-        languageContainer.style.background = 'var(--bg-color)';
-        languageContainer.style.padding = '10px';
-        languageContainer.style.border = '1px solid var(--fg-color)';
-        languageContainer.style.width = '100%';
-        languageContainer.style.boxSizing = 'border-box';
+    // Force language menu to be visible on mobile
+    const optionsMenu = document.querySelector('.options');
+    if (optionsMenu) {
+      const optionsButton = optionsMenu.querySelector('.menu-button');
+      const menu = optionsMenu.querySelector('.menu');
+
+      if (menu) {
+        // Create a more accessible language menu for mobile
+        menu.style.position = 'static';
+        menu.style.visibility = 'visible';
+        menu.style.maxHeight = 'none';
+        menu.style.overflow = 'visible';
+        menu.style.border = '1px solid var(--fg-color)';
+        menu.style.marginTop = '10px';
+        menu.style.marginBottom = '10px';
+        menu.style.padding = '10px';
+        menu.style.boxSizing = 'border-box';
         
-        // Make language checkboxes easier to tap
-        const checkboxes = languageContainer.querySelectorAll('input[type="checkbox"]');
-        const labels = languageContainer.querySelectorAll('label');
-        
+        // Fix checkbox display
+        const checkboxes = menu.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
-          checkbox.style.width = '24px';
-          checkbox.style.height = '24px';
-          checkbox.style.marginRight = '10px';
           checkbox.style.display = 'inline-block';
-          checkbox.style.verticalAlign = 'middle';
-          checkbox.style.appearance = 'checkbox'; // Override the reset.css
+          checkbox.style.width = '20px';
+          checkbox.style.height = '20px';
+          checkbox.style.marginRight = '8px';
+          checkbox.style.appearance = 'checkbox';
+          checkbox.style.webkitAppearance = 'checkbox';
           checkbox.style.opacity = '1';
-        });
-        
-        labels.forEach(label => {
-          label.style.display = 'block';
-          label.style.padding = '10px 5px';
-          label.style.margin = '5px 0';
+          checkbox.style.pointerEvents = 'auto';
         });
       }
-      
-      // Add click event to language menu toggle if needed
-      languageMenu.addEventListener('click', function(e) {
-        // Toggle visibility if we find a submenu that's initially hidden
-        const submenu = document.querySelector('.submenu-content');
-        if (submenu && getComputedStyle(submenu).display === 'none') {
-          submenu.style.display = 'block';
-          submenu.style.maxHeight = 'none';
-        }
-      });
     }
   }
 
@@ -137,7 +113,7 @@
       if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
         if (xDiff > 0) {
           // Swipe left - delete line
-          const removeBtn = currentLine.querySelector('.remove');
+          const removeBtn = currentLine.querySelector('.update-button');
           if (removeBtn) {
             removeBtn.click();
           }
@@ -151,7 +127,7 @@
         
         // Show feedback
         const feedback = document.createElement('div');
-        feedback.style.position = 'absolute';
+        feedback.style.position = 'fixed';
         feedback.style.top = '50%';
         feedback.style.left = '50%';
         feedback.style.transform = 'translate(-50%, -50%)';
@@ -177,11 +153,10 @@
 
   // Improve the font drop zone for mobile
   function improveDropZone() {
-    const dropZone = document.querySelector('.drop-zone');
     const dropMsg = document.querySelector('.drop-message');
     
-    if (dropZone && dropMsg) {
-      // Create a file input button for mobile users
+    if (dropMsg) {
+      // Create a more visible file input button for mobile users
       const fileInput = document.createElement('input');
       fileInput.type = 'file';
       fileInput.multiple = true;
@@ -192,8 +167,13 @@
       const selectBtn = document.createElement('button');
       selectBtn.textContent = 'Select Font Files';
       selectBtn.style.display = 'block';
-      selectBtn.style.margin = '10px auto';
+      selectBtn.style.width = '100%';
+      selectBtn.style.margin = '10px 0';
       selectBtn.style.padding = '12px 20px';
+      selectBtn.style.backgroundColor = 'var(--green)';
+      selectBtn.style.color = 'white';
+      selectBtn.style.border = 'none';
+      selectBtn.style.borderRadius = '4px';
       selectBtn.className = 'drop-btn';
       
       selectBtn.addEventListener('click', () => {
@@ -204,77 +184,46 @@
       dropMsg.appendChild(fileInput);
       dropMsg.appendChild(selectBtn);
       
-      // Connect to the app's font loading system
+      // Connect file input to the app
       fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-          // Trigger the same event that the app uses for drag and drop
-          const dropEvent = new CustomEvent('files-selected', {
-            detail: { files: e.target.files }
-          });
-          window.dispatchEvent(dropEvent);
-          
-          // Or try to directly trigger the app's font handling
-          if (window.handleFontFiles) {
+        console.log("File selected:", e.target.files);
+        if (e.target.files && e.target.files.length > 0) {
+          // First try to access the handleFontFiles function
+          if (typeof window.handleFontFiles === 'function') {
             window.handleFontFiles(e.target.files);
+          } else {
+            // If function isn't available directly, try to import it
+            import('./Fonts.js').then(module => {
+              if (typeof module.handleFontFiles === 'function') {
+                module.handleFontFiles(e.target.files);
+              } else {
+                console.error("handleFontFiles function not found");
+              }
+            }).catch(err => {
+              console.error("Error importing Fonts.js:", err);
+            });
           }
         }
       });
     }
   }
 
-  // Create collapsible sections to save space
-  function createCollapsibleSections() {
-    // Add collapsible behavior to the header
-    const header = document.querySelector('.header');
-    
-    if (header) {
-      // Create header sections that can be collapsed
-      const sections = [
-        { selector: '.logo', title: 'Stack & Justify' },
-        { selector: '.drop-message', title: 'Add Fonts' },
-        { selector: '.options', title: 'Options' },
-        { selector: '.features', title: 'Features' },
-        { selector: '.header-btns', title: 'Actions' }
-      ];
-      
-      sections.forEach(section => {
-        const element = header.querySelector(section.selector);
-        if (!element || element.querySelector('.mobile-section-header')) return;
-        
-        // Save the original content
-        const content = element.innerHTML;
-        
-        // Create a collapsible section
-        element.innerHTML = '';
-        
-        const sectionHeader = document.createElement('div');
-        sectionHeader.className = 'mobile-section-header';
-        sectionHeader.innerHTML = `
-          <span>${section.title}</span>
-          <span class="toggle-icon">▼</span>
-        `;
-        
-        const sectionContent = document.createElement('div');
-        sectionContent.className = 'mobile-section-content';
-        sectionContent.innerHTML = content;
-        sectionContent.style.display = 'none';
-        
-        element.appendChild(sectionHeader);
-        element.appendChild(sectionContent);
-        
-        // Skip collapsible behavior for logo section
-        if (section.selector === '.logo') {
-          sectionContent.style.display = 'block';
-          return;
+  // Ensure file selection works properly
+  function improveFileSelection() {
+    // Add an additional direct file input for the form
+    const fileUpload = document.getElementById('file-upload');
+    if (fileUpload) {
+      fileUpload.addEventListener('change', (e) => {
+        console.log("Regular file input change:", e.target.files);
+        if (e.target.files && e.target.files.length > 0 && typeof window.handleFontFiles === 'function') {
+          window.handleFontFiles(e.target.files);
         }
-        
-        // Add toggle functionality
-        sectionHeader.addEventListener('click', () => {
-          const isVisible = sectionContent.style.display !== 'none';
-          sectionContent.style.display = isVisible ? 'none' : 'block';
-          sectionHeader.querySelector('.toggle-icon').textContent = isVisible ? '▼' : '▲';
-        });
       });
+    }
+
+    // Expose handleFontFiles to window for mobile support
+    if (window.Fonts && typeof window.Fonts.handleFontFiles === 'function') {
+      window.handleFontFiles = window.Fonts.handleFontFiles;
     }
   }
 })();
