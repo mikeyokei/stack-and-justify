@@ -22,8 +22,6 @@
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
     padding: 10px 0;
-    z-index: 9999 !important;
-    position: fixed !important;
   }
 
   .menu-item {
@@ -54,7 +52,6 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     background: #f5f5f5;
-    z-index: 9999 !important;
   }
 
   /* Make language checkboxes easier to tap */

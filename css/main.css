@@ -1,13 +1,6 @@
 /* Typography */
 
 @font-face {
-	font-family: "NaNRage Soft";
-	src: url("../NaNRageSoft-VF.woff2") format("woff2");
-	font-weight: 100 900;
-	font-variation-settings: "wght" 400;
-}
-
-@font-face {
 	font-family: "Plomb Sans";
 	src: url("../fonts/PlombSans-Regular.woff2") format("woff2");
 	font-weight: 400;
@@ -20,7 +13,7 @@
 }
 
 :root {
-	font-family: 'NaNRage Soft', 'Plomb Sans', sans-serif;
+	font-family: Plomb Sans;
 	font-size: 14px;
 	line-height: 1.2;
 }
@@ -44,102 +37,6 @@
 	}
 }
 
-/* Proofokei Design System Components */
-
-/* Sticky Note Container */
-.note {
-	background: var(--yellow-note);
-	border: 1px solid #000;
-	border-radius: 2px;
-	padding: 1rem;
-	position: relative;
-	margin-bottom: 1rem;
-}
-
-/* Button Base Styles */
-.btn-base {
-	border: 1px solid #000;
-	font-family: 'NaNRage Soft', 'Plomb Sans', sans-serif;
-	border-radius: 2px;
-	transition: all 0.2s ease;
-	padding: 0.5rem 1rem;
-	cursor: pointer;
-	background: transparent;
-}
-
-.btn-blue {
-	background: var(--blue-note);
-}
-
-.btn-pink {
-	background: var(--pink-note);
-}
-
-.btn-yellow {
-	background: var(--yellow-note);
-}
-
-.btn-base:hover {
-	transform: translateY(-1px);
-	box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
-}
-
-.btn-base:active {
-	transform: translateY(0);
-	box-shadow: none;
-}
-
-/* Brutalist Sliders */
-.slider {
-	background: var(--blue-note);
-	height: 4px;
-	border: 1px solid #000;
-	border-radius: 0;
-}
-
-.slider::-webkit-slider-thumb {
-	appearance: none;
-	width: 18px;
-	height: 18px;
-	background: var(--orange-note);
-	border: 1px solid #000;
-	border-radius: 0;
-	cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-	width: 18px;
-	height: 18px;
-	background: var(--orange-note);
-	border: 1px solid #000;
-	border-radius: 0;
-	cursor: pointer;
-}
-
-/* Dynamic Island Header */
-.dynamic-island {
-	position: fixed;
-	top: 12px;
-	left: 50%;
-	transform: translateX(-50%);
-	background: var(--yellow-note);
-	border: 1px solid #000;
-	border-radius: 9999px;
-	padding: 8px 16px;
-	z-index: 1030;
-	transition: all 0.3s cubic-bezier(0.32, 0.72, 0, 1);
-	font-size: 12px;
-	font-weight: 600;
-	box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.dynamic-island:hover {
-	transform: translateX(-50%) scale(1.05);
-	box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Removed floating animation per user request */
-
 
 /* Base */
 
@@ -149,7 +46,7 @@ html {
 }
 
 body {
-	padding: 3rem 2rem 2rem 2rem;
+	padding: 2rem;
 	margin: 0;
 	box-sizing: border-box;
 	background: var(--bg-color);
@@ -159,14 +56,7 @@ body {
 	min-height: 100vh;
 	transition: background 0.1s, color 0.2s;
 
-	/* Proofokei Design System Colors */
-	--yellow-note: #FFFBCC;
-	--blue-note: #CDEBFF;
-	--pink-note: #FFD9F7;
-	--orange-note: #FFB56B;
-	
-	/* Updated color scheme */
-	--bg-color: #F5F5F5;
+	--bg-color: #FFF;
 	--fg-color: #000;
 	--grey-light: #F9F9F9;
 	--grey: #A0A0A0;
@@ -175,12 +65,6 @@ body {
 }
 
 body.dark {
-	/* Dark mode adaptations for Proofokei */
-	--yellow-note: #2A2A1F;
-	--blue-note: #1A1A2A;
-	--pink-note: #2A1A25;
-	--orange-note: #2A1F0F;
-	
 	--bg-color: #000;
 	--fg-color: #FFF;
 	--grey-light: #171717;
@@ -229,23 +113,6 @@ input[disabled] {
 
 button {
 	cursor: pointer;
-	border: 1px solid #000;
-	border-radius: 2px;
-	padding: 0.25rem 0.5rem;
-	background: var(--yellow-note);
-	transition: all 0.2s ease;
-}
-
-button:hover {
-	background: var(--orange-note);
-	transform: translateY(-1px);
-	box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
-}
-
-button:active {
-	transform: translateY(0);
-	box-shadow: none;
-	background: var(--pink-note);
 }
 
 a {
@@ -253,11 +120,13 @@ a {
 	cursor: pointer;
 }
 
-a:hover {
+a:hover,
+button:hover {
 	color: var(--green);
 }
 
-a:active {
+a:active,
+button:active {
 	color: var(--green-light);
 }
 
@@ -277,12 +146,6 @@ a:active {
 	grid-column-gap: 2rem;
 	grid-template-columns: 2fr 3fr 1fr 1fr 1fr;
 	padding-bottom: 4rem;
-	background: var(--blue-note);
-	border: 1px solid #000;
-	border-radius: 2px;
-	padding: 1rem;
-	margin-bottom: 2rem;
-	overflow: visible;
 }
 
 .logo {
@@ -365,11 +228,6 @@ body.dark .logo svg .fill {
 	display: flex;
 	justify-content: space-between;
 	margin-top: 4rem;
-	background: var(--pink-note);
-	border: 1px solid #000;
-	border-radius: 2px;
-	padding: 1rem;
-	position: relative;
 }
 
 .footer .credit,
@@ -414,12 +272,9 @@ body.dark .logo svg .fill {
 /* Splash Screen */
 
 .splash-screen {
-	background: var(--orange-note);
-	border: 1px solid #000;
-	border-radius: 2px;
-	padding: 2rem;
+	border-top: 1px solid;
+	padding-top: 0.5rem;
 	margin-top: 3.285rem;
-	position: relative;
 }
 
 .splash-screen-text {
@@ -440,13 +295,7 @@ body.dark .logo svg .fill {
 .specimen {
 	display: grid;
 	grid-column-gap: 2rem;
-	grid-template-columns: [left] 1fr [middle] auto [right] 1fr;
-	background: var(--yellow-note);
-	border: 1px solid #000;
-	border-radius: 2px;
-	padding: 1rem;
-	position: relative;
-	margin-bottom: 2rem;
+	grid-template-columns: [left] 1fr [middle] auto [right] 1fr;	
 }
 
 .specimen-header {
@@ -473,8 +322,8 @@ body.dark .logo svg .fill {
 }
 
 .specimen-line:hover {
-	background-color: var(--blue-note);
-	border-radius: 2px;
+	background-color: var(--grey-light);
+
 }
 
 @supports not (grid-template-columns: subgrid) {
@@ -605,13 +454,13 @@ body.dark .logo svg .fill {
 	visibility: hidden;
 	position: absolute;
 	top: -2.1rem;
-	background: var(--orange-note);
+	background: var(--bg-color);
 	padding: 0.2rem 0.35rem;
-	border: 1px solid #000;
-	border-radius: 2px;
-	box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+	border: 1px dotted;
+	border-radius: 0.35rem;
+	box-shadow: 1px 2px 2px rgba(0,0,0,0.25);
 	white-space: nowrap;
-	z-index: 10000;
+	z-index: 1;
 	pointer-events: none;
 }
 
@@ -631,13 +480,14 @@ body.dark .logo svg .fill {
 	position: absolute;
 	top: -2.1rem;
 	right: 0;
-	background: var(--orange-note);
+	background-color: var(--bg-color);
+	background: var(--bg-color);
 	padding: 0.2rem 0.35rem;
-	border: 1px solid #000;
-	border-radius: 2px;
-	box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+	border: 1px dotted;
+	border-radius: 0.35rem;
+	box-shadow: 1px 2px 2px rgba(0,0,0,0.25);
 	white-space: nowrap;
-	z-index: 10000;
+	z-index: 1;
 	pointer-events: none;
 }
 
@@ -664,11 +514,6 @@ body.dark .logo svg .fill {
 	min-width: 0;
 	padding-top: 0.9rem;
 	padding-bottom: 0.9rem;
-	background: var(--pink-note);
-	border: 1px solid #000;
-	border-radius: 2px;
-	padding: 1rem;
-	margin-bottom: 1rem;
 }
 
 .font-items-scroller {
@@ -732,11 +577,9 @@ body.dark .logo svg .fill {
 
 .font-item:hover,
 .font-item.drag-clone {
-	border: solid 1px #000;
-	background: var(--orange-note);
-	color: #000;
-	transform: translateY(-2px);
-	box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+	border: dotted 1px;
+	background: var(--bg-color);
+	color: var(--green);
 }
 
 .font-item.drag-clone {
@@ -766,11 +609,9 @@ body.dark .logo svg .fill {
 }
 
 .drop-placeholder {
-	background: var(--orange-note);
+	background: var(--green);
 	width: 1rem;
 	margin-right: 1rem;
-	border: 1px solid #000;
-	border-radius: 2px;
 }
 
 @keyframes spinning {
@@ -780,37 +621,6 @@ body.dark .logo svg .fill {
 	to {
 		transform: rotate(360deg);
 	}
-}
-
-/* Brutalist Loading Animation */
-@keyframes pulse {
-	0%, 100% { 
-		transform: scale(1);
-		background: var(--yellow-note);
-	}
-	50% { 
-		transform: scale(1.05);
-		background: var(--orange-note);
-	}
-}
-
-/* Removed hover animation per user request */
-
-/* Bounce Animation for Buttons */
-@keyframes bounce {
-	0%, 20%, 60%, 100% { 
-		transform: translateY(0);
-	}
-	40% { 
-		transform: translateY(-10px);
-	}
-	80% { 
-		transform: translateY(-5px);
-	}
-}
-
-.btn-base.bounce {
-	animation: bounce 1s ease-in-out;
 }
 
 
@@ -1014,11 +824,11 @@ select[disabled] {
 	position: absolute;
 	top: 1.5rem;
 	left: -1rem;
-	background: var(--blue-note);
-	border: 1px solid #000;
-	border-radius: 2px;
-	box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
-	z-index: 9999;
+	background: var(--bg-color);
+	border: 1px dotted;
+	border-radius: 0.35rem;
+	box-shadow: 1px 2px 2px rgba(0,0,0,0.25);
+	z-index: 3;
 	max-height: calc(100vh - 5.5rem);
 	overflow: auto;
 }
